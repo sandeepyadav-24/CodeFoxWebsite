@@ -86,6 +86,7 @@ app.get("/mcq", (req: Request, res: Response) => {
           question:string,
           option:array,
           right_answer:index of right answer
+          explanation: short explanation of right answer
           
       }`
 

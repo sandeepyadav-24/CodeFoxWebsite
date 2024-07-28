@@ -38,7 +38,7 @@ const Test = ({ link, title, channel }: any) => {
         .trim();
 
       const dataArray = JSON.parse(newdata);
-      //console.log(dataArray);
+      console.log(dataArray);
 
       setQuestions(dataArray);
     } catch (error) {
