@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
@@ -8,8 +8,12 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { BiTestTube } from "react-icons/bi";
 import { ClipLoader } from "react-spinners";
+import Image from "next/image";
+import CircularProgress from "@mui/material/CircularProgress";
+import { data } from "../../db/facts";
 
 const Test = ({ link, title, channel }: any) => {
+  const [currentFactIndex, setCurrentFactIndex] = useState(0);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState<any[]>([]);
@@ -17,6 +21,14 @@ const Test = ({ link, title, channel }: any) => {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [score, setScore] = useState(0);
   const [quizEnd, setQuizEnd] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentFactIndex((prevIndex) => (prevIndex + 1) % data.length);
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const params = {
     link,
@@ -88,8 +100,20 @@ const Test = ({ link, title, channel }: any) => {
         <DialogTitle>Quiz</DialogTitle>
         <DialogContent>
           {loading ? (
-            <div className="flex justify-center items-center h-[700px]">
-              <ClipLoader size={50} color={"#123abc"} loading={loading} />
+            <div className="flex justify-center items-center h-[650px] flex-col">
+              <Image
+                src="/assets/runningFox.gif"
+                alt="RunningFox"
+                width={500}
+                height={500}
+              />
+              <CircularProgress />
+
+              <div className="my-2">Generating the Test ...</div>
+              <div>
+                <span className="font-semibold">Fact: </span>
+                {data[currentFactIndex]}
+              </div>
             </div>
           ) : !quizEnd ? (
             <div className="h-[700px]">

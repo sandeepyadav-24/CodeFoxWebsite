@@ -1,5 +1,3 @@
-import { link } from "fs";
-
 export const data = [
   {
     name: "Chapter 1 || Introduction to C++",
