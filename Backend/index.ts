@@ -31,13 +31,18 @@ app.get("/", (req: Request, res: Response) => {
 
 
         Include a comprehensive overview of the main points, key concepts, and supporting details. 
-        Explain complex ideas in a clear and concise manner. 
+
+        Explain complex ideas in a clear and concise manner.
+
         Use headings and bullet points to organize the information effectively. 
-        If applicable, analyze the video's strengths, weaknesses, and potential areas for improvement.
 
 
-        try without any extension`
-      
+        try without any extension and
+        
+        your response should be wrap inside paragraph tag with proper styling, color, spacing etc using only tailwind
+
+        style as much beautiful as you can
+        `
         const result = await model.generateContent(prompt);
         const response = await result.response;
         const text = response.text();
