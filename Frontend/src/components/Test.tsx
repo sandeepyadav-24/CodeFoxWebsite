@@ -11,7 +11,7 @@ const Test = ({ link, title, channel }: any) => {
     title,
     channel,
   };
-  console.log(params);
+  // console.log(params);
   const handleSummary = async () => {
     const response = await axios.get("http://localhost:4000/mcq", {
       params,
