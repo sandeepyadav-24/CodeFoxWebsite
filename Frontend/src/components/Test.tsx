@@ -21,6 +21,7 @@ const Test = ({ link, title, channel }: any) => {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [score, setScore] = useState(0);
   const [quizEnd, setQuizEnd] = useState(false);
+  const [userAnswers, setUserAnswers] = useState<number[]>([]); // Store user answers
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -97,7 +98,7 @@ const Test = ({ link, title, channel }: any) => {
         <BiTestTube className="w-8 h-8" />
       </button>
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-        <DialogTitle>Quiz</DialogTitle>
+        <DialogTitle className="border-black  border-b-[1px]">Quiz</DialogTitle>
         <DialogContent>
           {loading ? (
             <div className="flex justify-center items-center h-[650px] flex-col">
@@ -118,33 +119,42 @@ const Test = ({ link, title, channel }: any) => {
           ) : !quizEnd ? (
             <div className="h-[700px]">
               {questions.length > 0 && (
-                <div>
-                  <h3>{questions[currentQuestionIndex].question}</h3>
-                  {questions[currentQuestionIndex].options.map(
-                    (option: string, index: number) => (
-                      <div key={index}>
-                        <label>
-                          <input
-                            type="radio"
-                            name="quiz-option"
-                            checked={selectedOption === index}
-                            onChange={() => handleOptionChange(index)}
-                          />
-                          {option}
-                        </label>
-                      </div>
-                    )
-                  )}
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleNextQuestion}
-                    disabled={selectedOption === null}
-                  >
-                    {currentQuestionIndex < questions.length - 1
-                      ? "Next"
-                      : "Submit"}
-                  </Button>
+                <div className="flex flex-row my-5">
+                  <div className="w-2/5">
+                    <h2 className="font-semibold">Problem Statement</h2>
+                    <h3>{questions[currentQuestionIndex].question}</h3>
+                  </div>
+                  <div className="w-3/5">
+                    {questions[currentQuestionIndex].options.map(
+                      (option: string, index: number) => (
+                        <div
+                          key={index}
+                          className="border-[#E3E3E3] border-2 rounded-md my-2 p-2"
+                        >
+                          <label>
+                            <input
+                              type="radio"
+                              name="quiz-option"
+                              checked={selectedOption === index}
+                              onChange={() => handleOptionChange(index)}
+                              className="mx-2"
+                            />
+                            {option}
+                          </label>
+                        </div>
+                      )
+                    )}
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleNextQuestion}
+                      disabled={selectedOption === null}
+                    >
+                      {currentQuestionIndex < questions.length - 1
+                        ? "Next"
+                        : "Submit"}
+                    </Button>
+                  </div>
                 </div>
               )}
             </div>
@@ -154,6 +164,20 @@ const Test = ({ link, title, channel }: any) => {
               <p>
                 Your score: {score} / {questions.length}
               </p>
+              <h4>Review Your Answers:</h4>
+              <div>
+                {questions.map((question, index) => (
+                  <div key={index} className="mb-4">
+                    <h5>
+                      {index + 1}. {question.question}
+                    </h5>
+                    <p>Your answer: {question.options[userAnswers[index]]}</p>
+                    <p>
+                      Correct answer: {question.options[question.right_answer]}
+                    </p>
+                  </div>
+                ))}
+              </div>
               <Button variant="contained" color="primary" onClick={handleRetry}>
                 Retry
               </Button>
