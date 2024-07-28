@@ -43,7 +43,7 @@ const Summary = ({ link, title, channel }: any) => {
         params,
       });
       const newdata = response.data.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace("*", "");
-      console.log(newdata)
+      // console.log(newdata)
       setSummaryData(newdata);
 
 
