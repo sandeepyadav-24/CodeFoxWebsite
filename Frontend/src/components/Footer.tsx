@@ -26,7 +26,7 @@ const Footer = () => {
         <hr className="my-10 bg-black text-black" />
         <div className="flex flex-col md:flex-row">
           <div className="text-[#2F4AE3] md:w-1/2 text-3xl font-semibold mb-10 md:mb-0">
-            Codefox
+            CodeFox
           </div>
           <div className="md:w-1/2 text-[#808684]">
             Built in the <span className="text-[#3670FF]">college Dorm</span>.
@@ -56,7 +56,7 @@ const Footer = () => {
           ></path>
         </svg>
         <div className="relative z-10 bg-[#F0EACF] text-center py-5">
-          © 2024 Codefox. All rights reserved.
+          © 2024 CodeFox. All rights reserved.
         </div>
       </div>
     </div>
