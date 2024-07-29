@@ -18,12 +18,20 @@ const AboutPage = () => {
           imageLink="https://avatars.githubusercontent.com/u/103882286?v=4"
         />
         <AboutCard
-          name="Moh. Faizan "
+          name="Moh Faizan "
           imageLink="https://avatars.githubusercontent.com/u/117738645?v=4"
           linkedinLink="https://www.linkedin.com/in/moh-faizan-505319229/"
           githubLink="https://github.com/Faizanusmani06"
           emailLink="faizanusmani06@gmail.com"
         />
+        <AboutCard
+          name="Harsh Kumar Patel "
+          imageLink="https://avatars.githubusercontent.com/u/126771343?v=4"
+          linkedinLink="https://www.linkedin.com/in/harsh-kumar-patel-032388230"
+          githubLink="https://github.com/harshkumarpatelh"
+          emailLink="codeharsh13@gmail.com"
+        />
+        
       </div>
     </div>
   );
