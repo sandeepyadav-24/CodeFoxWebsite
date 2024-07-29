@@ -39,7 +39,7 @@ const Summary = ({ link, title, channel }: any) => {
     setOpen(true); // Open the modal immediately
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:4000", {
+      const response = await axios.get("http://localhost:4000/api/summary", {
         params,
       });
       const newdata = response.data.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace("*", "");
