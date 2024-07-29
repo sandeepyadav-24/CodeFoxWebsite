@@ -41,7 +41,7 @@ const Test = ({ link, title, channel }: any) => {
     setLoading(true);
     setOpen(true);
     try {
-      const response = await axios.get("http://localhost:4000/mcq", {
+      const response = await axios.get("http://localhost:4000/api/mcq", {
         params,
       });
       const mydata = response.data;
