@@ -11,12 +11,11 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { FaYoutube } from "react-icons/fa";
 import { data } from "../../../../db/language";
 import Navbar from "../../../components/Navbar";
-import { FaNoteSticky } from "react-icons/fa6";
-import { BiTestTube } from "react-icons/bi";
 import Footer from "../../../components/Footer";
 
 import Summary from "../../../components/Summary";
 import Test from "../../../components/Test";
+import Notes from "../../../components/notes";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 const Cpp = () => {
@@ -70,7 +69,7 @@ const Cpp = () => {
                       </div>
                       <div className="w-7/12 pt-2">{video.name}</div>
                       <div className="w-1/12">
-                        <FaNoteSticky className="w-8 h-8" />
+                        <Notes title = {video.name}/>
                       </div>
                       <div className="w-1/12 pt-1">
                         <FaYoutube
