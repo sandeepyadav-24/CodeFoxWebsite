@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <title>codefox</title>
+        <title>CodeFox</title>
         <link rel="icon" href="./redfoxlogo.png" />
       </head>
       <body className={inter.className}>

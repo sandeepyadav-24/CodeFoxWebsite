@@ -66,7 +66,7 @@ const Summary = ({ link, title, channel }: any) => {
   return (
     <div>
       <button onClick={handleSummary}>
-        <RiArticleFill className="w-8 h-8" />
+        <RiArticleFill className="w-8 h-8 text-green-700" />
       </button>
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
         <DialogTitle className="border-b-4 shadow-sm">

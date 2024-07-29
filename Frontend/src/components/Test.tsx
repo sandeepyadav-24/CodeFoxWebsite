@@ -95,7 +95,7 @@ const Test = ({ link, title, channel }: any) => {
   return (
     <div>
       <button onClick={handleOpen}>
-        <BiTestTube className="w-8 h-8" />
+        <BiTestTube className="w-8 h-8 text-black-600" />
       </button>
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
         <DialogTitle className="border-black  border-b-[1px]">Quiz</DialogTitle>

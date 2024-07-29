@@ -73,7 +73,7 @@ const Cpp = () => {
                       </div>
                       <div className="w-1/12 pt-1">
                         <FaYoutube
-                          className="w-8 h-8 cursor-pointer"
+                          className="w-8 h-8 cursor-pointer text-red-700"
                           onClick={() => handleClickOpen(video.link)}
                         />
                       </div>
