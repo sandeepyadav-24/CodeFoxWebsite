@@ -44,7 +44,7 @@ const notes = ({title}: string|any) => {
   return (
     <div>
       <button onClick={handleGetData}>
-        <FaNoteSticky className="w-8 h-8" />
+        <FaNoteSticky className="w-8 h-8 text-orange-600" />
       </button>
       <Dialog
         open={open}

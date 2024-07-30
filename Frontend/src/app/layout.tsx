@@ -27,6 +27,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <title>CodeFox</title>
+        <link rel="icon" href="./redfoxlogo.png" />
+      </head>
       <body className={inter.className}>
         <SessionProvider>
           <RecoilRoot>{children}</RecoilRoot>
