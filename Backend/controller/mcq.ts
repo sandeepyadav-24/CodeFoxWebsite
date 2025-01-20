@@ -1,49 +1,75 @@
 import { Request, Response } from "express";
 import { model } from "../index";
+import { YoutubeTranscript } from "youtube-transcript";
+import OpenAI from "openai";
+import Groq from "groq-sdk";
 
 const mcqController = (req: Request, res: Response) => {
   async function run() {
-    const link = req.query.link;
+    const url = req.query.link;
     const title = req.query.title;
     const channel = req.query.channel;
 
-    console.log(link, channel, title);
-    const prompt = `
-        
-        generate 10 mcq using the content of the video: ${link}
-  
-  
-        title : ${title}
-      
-        channel: ${channel}`;
+    const groqKey = "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";
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    console.log(text);
+    const groq = new Groq({ apiKey: groqKey });
 
-    const newprompt =
-      text +
-      `
-        
-        ` +
-      `
-        
-        create an mcq json object having below format
-  
+    // Extract video ID from the link
+    //const videoId = url.split("v=")[1];
+
+    // Fetching transcript from Youtube API
+    const transcript = await YoutubeTranscript.fetchTranscript("sNrLlmOIn-c");
+
+    let value = "";
+    let count = 0;
+    for (const i of transcript) {
+      if (count >= 200) break;
+      value += i.text;
+      count++;
+    }
+    const question = 10;
+
+    const newPrompt = `
+Generate a JSON object for a multiple-choice question (MCQ) based on the following summary:
+"${value}"
+
+The MCQ should contain the following structure:
+{
+  "question": "Your question based on the summary",
+  "options": [
+    "Option A",
+    "Option B",
+    "Option C",
+    "Option D"
+  ],
+  "answer": "Correct option",
+  "explanation": "Brief explanation of the answer"
+}
+
+Ensure that the JSON is correctly formatted without syntax errors and that the question, options, and explanation are directly related to the provided summary.
+`;
+
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [
         {
-            question:string,
-            option:array,
-            right_answer:index of right answer
-            explanation: short explanation of right answer
-            
-        }`;
+          role: "user",
+          content: newPrompt,
+        },
+      ],
+      model: "llama3-70b-8192",
+      temperature: 1,
+      max_completion_tokens: 1024,
+      top_p: 1,
+      stream: false,
+      response_format: {
+        type: "json_object",
+      },
+      stop: null,
+    });
 
-    const newresult = await model.generateContent(newprompt);
-    const newresponse = await newresult.response;
-    const newtext = newresponse.text();
-    console.log(newtext);
-    res.json(newtext);
+    const newText = chatCompletion.choices[0].message.content;
+
+    res.json({ result: newText });
   }
 
   run();

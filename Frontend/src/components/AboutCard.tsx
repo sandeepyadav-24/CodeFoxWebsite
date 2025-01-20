@@ -6,36 +6,49 @@ import Link from "next/link";
 
 const AboutCard = (props: any) => {
   return (
-    <div className="rounded-2xl border-2 border-red mx-5 p-2  ">
-      <div>
-        <img
-          src={props.imageLink}
-          alt="Profile Picture"
-          className="rounded-full h-40 w-40 "
-        />
+    <div className="rounded-xl bg-white border border-[#E4EAEB] p-6 text-center hover:shadow-xl transition-shadow transform hover:-translate-y-1 w-full md:w-80">
+      {/* Profile Picture */}
+      <img
+        src={props.imageLink}
+        alt="Profile Picture"
+        className="rounded-full h-32 w-32 mx-auto border-4 border-[#3670FF] p-1"
+      />
 
-        <h1 className="name bg-[#3670FF] text-white rounded-lg px-2 py-1 text-center">
-          {props.name}
-        </h1>
-        <h1 className="font-semibold text-center">Developer</h1>
-      </div>
-      <div className="links flex flex-row  text-[#759EF0] px-5  my-10">
-        {/**<div className="email bg-[#EBEEFE] text-[#759EF0] rounded-full p-2 mx-1">
-          <Link href={props.linkedinLink}>
-            <FaLinkedinIn />
-          </Link>
-        </div>
+      {/* Name and Role */}
+      <h1 className="text-2xl font-bold text-[#2F4AE3] mt-5">{props.name}</h1>
+      <h2 className="text-lg text-[#616B6F] mt-2">Developer</h2>
 
-        <div className="email bg-[#EBEEFE] text-[#759EF0] rounded-full p-2 mx-1">
-          <Link href={props.githubLink}>
-            <FiGithub />
+      {/* Social Media Links */}
+      <div className="flex flex-row justify-center gap-6 mt-6">
+        {props.linkedinLink && (
+          <Link
+            href={props.linkedinLink}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div className="text-[#759EF0] hover:text-[#2F4AE3] transition-colors">
+              <FaLinkedinIn size={24} />
+            </div>
           </Link>
-        </div>
-        <div className="email bg-[#EBEEFE] text-[#759EF0] rounded-full p-2 mx-1">
+        )}
+        {props.githubLink && (
+          <Link
+            href={props.githubLink}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div className="text-[#759EF0] hover:text-[#2F4AE3] transition-colors">
+              <FiGithub size={24} />
+            </div>
+          </Link>
+        )}
+        {props.emailLink && (
           <Link href={`mailto:${props.emailLink}`}>
-            <CgMail />
+            <div className="text-[#759EF0] hover:text-[#2F4AE3] transition-colors">
+              <CgMail size={24} />
+            </div>
           </Link>
-        </div> */}
+        )}
       </div>
     </div>
   );

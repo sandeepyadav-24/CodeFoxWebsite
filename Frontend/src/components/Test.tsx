@@ -7,21 +7,34 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { BiTestTube } from "react-icons/bi";
-import { ClipLoader } from "react-spinners";
-import Image from "next/image";
 import CircularProgress from "@mui/material/CircularProgress";
+import Image from "next/image";
 import { data } from "../../db/facts";
 
-const Test = ({ link, title, channel }: any) => {
-  const [currentFactIndex, setCurrentFactIndex] = useState(0);
-  const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [questions, setQuestions] = useState<any[]>([]);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+// Define the question structure
+interface Question {
+  question: string;
+  options: string[];
+  answer: string;
+  explanation: string;
+}
+
+interface TestProps {
+  link: string;
+  title: string;
+  channel: string;
+}
+
+const Test: React.FC<TestProps> = ({ link, title, channel }) => {
+  const [currentFactIndex, setCurrentFactIndex] = useState<number>(0);
+  const [open, setOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [score, setScore] = useState(0);
-  const [quizEnd, setQuizEnd] = useState(false);
-  const [userAnswers, setUserAnswers] = useState<number[]>([]); // Store user answers
+  const [score, setScore] = useState<number>(0);
+  const [quizEnd, setQuizEnd] = useState<boolean>(false);
+  const [userAnswers, setUserAnswers] = useState<number[]>([]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -31,29 +44,25 @@ const Test = ({ link, title, channel }: any) => {
     return () => clearInterval(interval);
   }, []);
 
-  const params = {
-    link,
-    title,
-    channel,
-  };
-
   const handleOpen = async () => {
     setLoading(true);
     setOpen(true);
     try {
       const response = await axios.get("http://localhost:4000/api/mcq", {
-        params,
+        params: { link, title, channel },
       });
-      const mydata = response.data;
-      const newdata = mydata
+
+      console.log("Raw API response:", response.data);
+
+      // Remove Markdown formatting and parse the JSON data safely
+      const cleanData = response.data.result
         .replace(/```json/g, "")
         .replace(/```/g, "")
         .trim();
 
-      const dataArray = JSON.parse(newdata);
-      console.log(dataArray);
-
-      setQuestions(dataArray);
+      const parsedData: Question[] = JSON.parse(cleanData);
+      console.log("Parsed questions:", parsedData);
+      setQuestions(parsedData);
     } catch (error) {
       console.error("Error fetching questions:", error);
     } finally {
@@ -67,6 +76,7 @@ const Test = ({ link, title, channel }: any) => {
     setSelectedOption(null);
     setScore(0);
     setQuizEnd(false);
+    setUserAnswers([]);
   };
 
   const handleOptionChange = (index: number) => {
@@ -74,14 +84,23 @@ const Test = ({ link, title, channel }: any) => {
   };
 
   const handleNextQuestion = () => {
-    if (selectedOption === questions[currentQuestionIndex].right_answer) {
-      setScore(score + 1);
-    }
-    setSelectedOption(null);
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-    } else {
-      setQuizEnd(true);
+    if (selectedOption !== null) {
+      const correctIndex = questions[currentQuestionIndex].options.indexOf(
+        questions[currentQuestionIndex].answer
+      );
+
+      if (selectedOption === correctIndex) {
+        setScore((prevScore) => prevScore + 1);
+      }
+
+      setUserAnswers([...userAnswers, selectedOption]);
+
+      if (currentQuestionIndex < questions.length - 1) {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+        setSelectedOption(null);
+      } else {
+        setQuizEnd(true);
+      }
     }
   };
 
@@ -90,6 +109,7 @@ const Test = ({ link, title, channel }: any) => {
     setSelectedOption(null);
     setScore(0);
     setQuizEnd(false);
+    setUserAnswers([]);
   };
 
   return (
@@ -98,7 +118,7 @@ const Test = ({ link, title, channel }: any) => {
         <BiTestTube className="w-8 h-8 text-black-600" />
       </button>
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-        <DialogTitle className="border-black  border-b-[1px]">Quiz</DialogTitle>
+        <DialogTitle className="border-black border-b-[1px]">Quiz</DialogTitle>
         <DialogContent>
           {loading ? (
             <div className="flex justify-center items-center h-[650px] flex-col">
@@ -109,7 +129,6 @@ const Test = ({ link, title, channel }: any) => {
                 height={500}
               />
               <CircularProgress />
-
               <div className="my-2">Generating the Test ...</div>
               <div>
                 <span className="font-semibold">Fact: </span>
@@ -126,7 +145,7 @@ const Test = ({ link, title, channel }: any) => {
                   </div>
                   <div className="w-3/5">
                     {questions[currentQuestionIndex].options.map(
-                      (option: string, index: number) => (
+                      (option, index) => (
                         <div
                           key={index}
                           className="border-[#E3E3E3] border-2 rounded-md my-2 p-2"
@@ -166,17 +185,25 @@ const Test = ({ link, title, channel }: any) => {
               </p>
               <h4>Review Your Answers:</h4>
               <div>
-                {questions.map((question, index) => (
-                  <div key={index} className="mb-4">
-                    <h5>
-                      {index + 1}. {question.question}
-                    </h5>
-                    <p>Your answer: {question.options[userAnswers[index]]}</p>
-                    <p>
-                      Correct answer: {question.options[question.right_answer]}
-                    </p>
-                  </div>
-                ))}
+                {questions.map((question, index) => {
+                  const correctIndex = question.options.indexOf(
+                    question.answer
+                  );
+                  return (
+                    <div key={index} className="mb-4">
+                      <h5>
+                        {index + 1}. {question.question}
+                      </h5>
+                      <p>
+                        Your answer:{" "}
+                        {userAnswers[index] !== undefined
+                          ? question.options[userAnswers[index]]
+                          : "Not answered"}
+                      </p>
+                      <p>Correct answer: {question.options[correctIndex]}</p>
+                    </div>
+                  );
+                })}
               </div>
               <Button variant="contained" color="primary" onClick={handleRetry}>
                 Retry
