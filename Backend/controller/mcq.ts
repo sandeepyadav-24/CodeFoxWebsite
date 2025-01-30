@@ -3,6 +3,7 @@ import { model } from "../index";
 import { YoutubeTranscript } from "youtube-transcript";
 import OpenAI from "openai";
 import Groq from "groq-sdk";
+import { groq } from "../index";
 
 const mcqController = (req: Request, res: Response) => {
   async function run() {
@@ -10,9 +11,9 @@ const mcqController = (req: Request, res: Response) => {
     const title = req.query.title;
     const channel = req.query.channel;
 
-    const groqKey = "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";
+    //const groqKey = "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";
 
-    const groq = new Groq({ apiKey: groqKey });
+    //const groq = new Groq({ apiKey: groqKey });
 
     // Extract video ID from the link
     //const videoId = url.split("v=")[1];

@@ -6,6 +6,8 @@ import bodyParser from "body-parser";
 import notesRouter from "./routes/notes";
 import summaryRouter from "./routes/summary";
 import mcqRouter from "./routes/mcq";
+import curriculumRouter from "./routes/curriculum";
+import Groq from "groq-sdk";
 dotenv.config();
 
 const app: Express = express();
@@ -18,9 +20,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api/notes", notesRouter);
 app.use("/api/summary", summaryRouter);
 app.use("/api/mcq", mcqRouter);
+app.use("/api/curriculum", curriculumRouter);
 
 // DB Connection
 connectDB();
+
+// GROQ Key
+
+const groqKey = "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";
+
+//
+export const groq = new Groq({ apiKey: groqKey });
 
 // Gemini Setup
 const { GoogleGenerativeAI } = require("@google/generative-ai");
